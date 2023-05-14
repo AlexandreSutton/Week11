@@ -1,6 +1,7 @@
 package projects;
 
 import java.math.BigDecimal;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
@@ -14,13 +15,16 @@ public class ProjectsApp {
 /*This is where the application takes the user input and performs the CRUD operation*/
 	
 	private Scanner scanner = new Scanner(System.in);
-	private ProjectService projectservice = new ProjectService();
+	private ProjectService projectService = new ProjectService();
+	private Project curProject;
 	
 	// @formatter:off
 	private List<String> operations = List.of(
-		"1) Add a project"
+		"1) Add a project",
+		"2) List projects",
+		"3) Select a project"
 	);
-	// @formatter:off
+	// @formatter:on
 
 
 	public static void main(String[] args) {
@@ -44,6 +48,14 @@ public class ProjectsApp {
 				createProject();
 				break;
 				
+			case 2:
+				listProjects();
+				break;
+				
+			case 3:
+				selectProject();
+				break;
+				
 			default:
 				System.out.println("\n" + selection + " is not valid. Try again.");
 				break;
@@ -51,9 +63,24 @@ public class ProjectsApp {
 			
 			}
 			catch(Exception e) {
-				System.out.println("\nError" + e.toString() + " Try again.");
+				System.out.println("\nError" + e  + " Try again.");
 			}
 		}
+	}
+	
+	private void selectProject() {
+		listProjects();
+		Integer projectId = getIntInput("Enter a project ID to select a project");
+		curProject = null;
+		
+		curProject = projectService.fetchProjectById(projectId);
+	}
+	
+	private void listProjects() {
+		List<Project> projects = projectService.fetchAllProjects();
+		System.out.println("\nProjects: ");
+		projects.forEach(project -> System.out.println(" " + project.getProjectId() + ": " + project.getProjectName()));
+		
 	}
 	
 	/*gets user input for the row then calls to service to create a row */
@@ -72,7 +99,7 @@ public class ProjectsApp {
 		project.setDifficulty(difficulty);
 		project.setNotes(notes);
 		
-		Project dbProject = projectservice.addProject(project);
+		Project dbProject = projectService.addProject(project);
 		System.out.println("You have successfully create project: " + dbProject);
 	}
 	/*gets the users input and turns it into a BigDecimal */
@@ -127,5 +154,12 @@ public class ProjectsApp {
 		System.out.println("\nThese are the available selections. Press the Enter key to quit:");
 		
 		operations.forEach(line -> System.out.println(" " + line));
+		
+		if(Objects.isNull(curProject)) {
+			System.out.println("\nYou are not working with a project.");
+		}
+		else {
+			System.out.println("\nYou are working with project: " + curProject);
+		}
 	}
 }
