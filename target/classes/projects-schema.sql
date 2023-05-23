@@ -46,3 +46,25 @@ CREATE TABLE material(
   PRIMARY KEY (material_id),
   FOREIGN KEY (project_id) REFERENCES project (project_id) ON DELETE CASCADE
 );
+-- Add some data
+
+INSERT INTO project (project_name, estimated_hours, actual_hours, difficulty, notes)
+Values ('Build Mando Armor', 24, 34, 3, 'Mando Chest Armor');
+INSERT INTO material (project_id, material_name, num_required, cost)
+Values (1, 'Sheet of cintra', 1, 19.99);
+INSERT INTO material (project_id, material_name, num_required, cost)
+VALUES (1, 'Utility knife', 1, 5.95);
+INSERT INTO material (project_id, material_name, num_required, cost)
+VALUES (1, 'Heat gun', 1, 40.00);
+INSERT INTO step (project_id, step_text, step_order)
+VALUES (1, 'Draw armor template on cintra', 1);
+INSERT INTO step (project_id, step_text, step_order)
+VALUES (1, 'Cut out armor pieces with knife', 2);
+INSERT INTO step (project_id, step_text, step_order)
+VALUES (1, 'Use heat gun to shape armor pieces', 3);
+INSERT INTO category (category_id, category_name)
+VALUES (1, 'Armor');
+INSERT INTO project_category (project_id, category_id)
+VALUES (1, 1);
+INSERT INTO project_category (project_id, category_id)
+VALUES (1, 1);
